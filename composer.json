@@ -1,0 +1,19 @@
+{
+    "name": "marcoandresito/restaurant",
+    "description": "sistema para un restaurante",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+            "app/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Andres Vasquez",
+            "email": "sin@correo.bo"
+        }
+    ],
+    "require": {}
+}
