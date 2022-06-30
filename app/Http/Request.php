@@ -16,11 +16,11 @@ class Request
     public function setController($controller)
     {
         if (empty($controller)) {
-            $this->controller = "\App\Http\Controlles\HomeController";
+            $this->controller = "\App\Http\Controllers\HomeController";
         } else {
             $controller = strtolower($controller);
             $controller = ucfirst($controller);
-            $this->controller = "\App\Http\Controlles\\" . $controller . "Controller";
+            $this->controller = "\App\Http\Controllers\\" . $controller . "Controller";
         }
     }
 
@@ -31,7 +31,19 @@ class Request
 
     public function setMethod($method)
     {
-        $this->method = $method;
+        if ($method == "GET") {
+            if ($this->getId() == 0) {
+                $this->method = "index";
+            } else {
+                $this->method = "show";
+            }
+        } else if ($method == "POST") {
+            $this->method = "store";
+        } else if ($method == "PUT" || $method == "PATCH") {
+            $this->method = "update";
+        } else if ($method == "DELETE") {
+            $this->method = "destroy";
+        }
     }
 
     public function getId()
@@ -56,10 +68,11 @@ class Request
         $controller = $segment[1];
         $this->setController($controller);
 
-        // TODO: call setMethod()
-
         $id = $segment[2];
         $this->setId($id);
+
+        $method = $_SERVER['REQUEST_METHOD'];
+        $this->setMethod($method);
     }
 
     public function send()
@@ -69,5 +82,8 @@ class Request
 
         echo "<p>Id:</p>";
         var_dump($this->getId());
+
+        echo "<p>Method:</p>";
+        var_dump($this->getMethod());
     }
 }
