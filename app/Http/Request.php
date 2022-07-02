@@ -77,13 +77,12 @@ class Request
 
     public function send()
     {
-        echo "<p>Controlador:</p>";
-        var_dump($this->getController());
+        $controller = $this->getController();
+        $method = $this->getMethod();
+        $id = $this->getId();
 
-        echo "<p>Id:</p>";
-        var_dump($this->getId());
+        $response = call_user_func([new $controller, $method], $id);
 
-        echo "<p>Method:</p>";
-        var_dump($this->getMethod());
+        $response->send();
     }
 }
