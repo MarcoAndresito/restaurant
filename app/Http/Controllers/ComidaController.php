@@ -6,10 +6,24 @@ class ComidaController
 {
     public function index()
     {
-        $comidas = [];
-        if (!empty($_SESSION['comidas'])) {
-            $comidas = $_SESSION['comidas'];
-        }
+        $comidas = [
+            [
+                "id" => "1",
+                "nombre" => "majadito",
+            ],
+            [
+                "id" => "2",
+                "nombre" => "tallarin",
+            ],
+            [
+                "id" => "3",
+                "nombre" => "pollo frito",
+            ],
+            [
+                "id" => "4",
+                "nombre" => "sopa",
+            ],
+        ];
 
         return json($comidas);
     }
@@ -80,9 +94,9 @@ class ComidaController
 
         foreach ($comidas as $key => $comida) {
             if ($comida['id'] == $id) {
-                
+
                 $comidas[$key] = null;
-                
+
 
                 $_SESSION['comidas'] =  $comidas;
 
