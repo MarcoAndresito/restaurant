@@ -2,108 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\ComidaRepository;
+
 class ComidaController
 {
     public function index()
     {
-        $comidas = [
-            [
-                "id" => "1",
-                "nombre" => "majadito",
-            ],
-            [
-                "id" => "2",
-                "nombre" => "tallarin",
-            ],
-            [
-                "id" => "3",
-                "nombre" => "pollo frito",
-            ],
-            [
-                "id" => "4",
-                "nombre" => "sopa",
-            ],
-        ];
-
+        $comidas = ComidaRepository::GetAll();
         return json($comidas);
     }
 
     public function show($id)
     {
-        $comidas = [];
-        if (!empty($_SESSION['comidas'])) {
-            $comidas = $_SESSION['comidas'];
+        $comida = ComidaRepository::Find($id);
+        if (empty($comida)) {
+            return json("no se encontro la comida", 404);
         }
-
-        foreach ($comidas as $comida) {
-            if ($comida['id'] == $id) {
-                return json($comida);
-            }
-        }
-
-        return json(status: 404);
+        return json($comida);
     }
 
     public function store($id)
     {
-        $comidas = [];
-        if (!empty($_SESSION['comidas'])) {
-            $comidas = $_SESSION['comidas'];
-        }
-
-        $comida = [
-            'id' => $id,
-            'nombre' => 'majadito',
-        ];
-
-        array_push($comidas, $comida);
-
-        $_SESSION['comidas'] =  $comidas;
-
-        return json($comida);
+        return json();
     }
 
     public function update($id)
     {
-        $comidas = [];
-        if (!empty($_SESSION['comidas'])) {
-            $comidas = $_SESSION['comidas'];
-        }
-
-        foreach ($comidas as $key => $comida) {
-            if ($comida['id'] == $id) {
-                $comida['nombre'] = 'sopa de pollo';
-
-                $comidas[$key] = $comida;
-
-                $_SESSION['comidas'] =  $comidas;
-
-                return json($comida);
-            }
-        }
-
-        return json(status: 400);
+        return json();
     }
 
     public function destroy($id)
     {
-        $comidas = [];
-        if (!empty($_SESSION['comidas'])) {
-            $comidas = $_SESSION['comidas'];
-        }
-
-        foreach ($comidas as $key => $comida) {
-            if ($comida['id'] == $id) {
-
-                $comidas[$key] = null;
-
-
-                $_SESSION['comidas'] =  $comidas;
-
-                return json($comida);
-            }
-        }
-
-        return json(status: 400);
+        ComidaRepository::Delete($id);
+        return json("ok");
     }
 }
