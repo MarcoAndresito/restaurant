@@ -21,14 +21,16 @@ class ComidaController
         return json($comida);
     }
 
-    public function store($id)
+    public function store($comida)
     {
-        return json();
+        ComidaRepository::Save($comida);
+        return json("ok");
     }
 
-    public function update($id)
+    public function update($comida)
     {
-        return json();
+        ComidaRepository::Update($comida);
+        return json("ok");
     }
 
     public function destroy($id)

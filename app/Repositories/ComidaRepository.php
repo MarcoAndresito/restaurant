@@ -10,9 +10,9 @@ class ComidaRepository
     public static function GetAll()
     {
         $conection = ConectionPDO::CreateConection();
-        $sentencia = $conection->prepare("select * from Comidas");
-        $sentencia->execute();
-        $rows = $sentencia->fetchAll();
+        $statement = $conection->prepare("select * from Comidas");
+        $statement->execute();
+        $rows = $statement->fetchAll();
         $comidas = array();
         foreach ($rows as $row) {
             $comida = new Comida();
@@ -25,9 +25,9 @@ class ComidaRepository
     public static function Find($id)
     {
         $conection = ConectionPDO::CreateConection();
-        $sentencia = $conection->prepare("select * from Comidas where id = ?");
-        $sentencia->execute([$id]);
-        $row = $sentencia->fetch();
+        $statement = $conection->prepare("select * from Comidas where id = ?");
+        $statement->execute([$id]);
+        $row = $statement->fetch();
         if (empty($row)) {
             return null;
         }
@@ -39,7 +39,38 @@ class ComidaRepository
     public static function Delete($id)
     {
         $conection = ConectionPDO::CreateConection();
-        $sentencia = $conection->prepare("delete from Comidas where id = ?");
-        $sentencia->execute([$id]);
+        $statement = $conection->prepare("delete from Comidas where id = ?");
+        $statement->execute([$id]);
+    }
+
+    public static function Save($comida)
+    {
+        $conection = ConectionPDO::CreateConection();
+        $statement = $conection->prepare("insert into comidas values(?,?,?,?)");
+        $statement->execute([$comida->id, $comida->nombre, $comida->precio, $comida->descripcion]);
+    }
+
+    public static function Update($comida)
+    {
+        $sql = "update comidas set ";
+
+        if (!empty($comida->nombre)) {
+            $sql .= "nombre = '" . $comida->nombre . "', ";
+        }
+
+        if (!empty($comida->precio)) {
+            $sql .= "precio = " . $comida->precio . ", ";
+        }
+
+        if (!empty($comida->descripcion)) {
+            $sql .= "descripcion = '" . $comida->descripcion . "', ";
+        }
+
+        $sql = rtrim($sql, ", ");
+
+        $sql .= "where id = " . $comida->id;
+
+        $conection = ConectionPDO::CreateConection();
+        $conection->exec($sql);
     }
 }

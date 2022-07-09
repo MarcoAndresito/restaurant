@@ -39,8 +39,10 @@ class Request
             }
         } else if ($method == "POST") {
             $this->method = "store";
+            $this->id = json_decode(file_get_contents("PHP://input"));
         } else if ($method == "PUT" || $method == "PATCH") {
             $this->method = "update";
+            $this->id = json_decode(file_get_contents("PHP://input"));
         } else if ($method == "DELETE") {
             $this->method = "destroy";
         }
