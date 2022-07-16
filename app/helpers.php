@@ -19,8 +19,9 @@ function validate($objet, $valiadateList)
 
     if (!empty($errorList)) {
         return [
-            "errorType" => "validation",
-            "errorList" => $errorList
+            "state" => "error",
+            "type" => "validation",
+            "list" => $errorList
         ];
     } else {
         return null;

@@ -17,9 +17,9 @@ class ComidaController
         $comida = ComidaRepository::Find($id);
         if (empty($comida)) {
             return json([
-                "status" => "error",
-                "errorType" => "internal error",
-                "errorDescription" => "no se encotro el recurso"
+                "state" => "error",
+                "type" => "internal error",
+                "list" => ["no se encotro el recurso"]
             ], 404);
         }
         return json($comida);
@@ -27,14 +27,20 @@ class ComidaController
 
     public function store($comida)
     {
-        $errorList = validate($comida, ["id", "nombre", "precio"]);
+        $errorList = validate($comida, ["nombre", "precio"]);
         if (!empty($errorList)) {
             return json($errorList, 400);
         }
-        ComidaRepository::Save($comida);
+
+        $errorList = $this->validateComida($comida);
+        if (!empty($errorList)) {
+            return json($errorList, 400);
+        }
+
+        $id = ComidaRepository::Save($comida);
         return json([
-            "status" => "ok",
-            "descripcion" => "guardado correctamente"
+            "state" => "ok",
+            "mensage" => "guardado correctamente con id: " . $id
         ]);
     }
 
@@ -46,15 +52,15 @@ class ComidaController
         }
         if (empty(ComidaRepository::Find($comida->id))) {
             return json([
-                "status" => "error",
-                "errorType" => "internal error",
-                "errorDescription" => "no se encontro el recurso para editarlo"
+                "state" => "error",
+                "type" => "internal error",
+                "list" => ["no se encontro el recurso para editarlo"]
             ], 404);
         }
         ComidaRepository::Update($comida);
         return json([
-            "status" => "ok",
-            "descripcion" => "editado correctamente",
+            "state" => "ok",
+            "mensage" => "editado correctamente",
         ]);
     }
 
@@ -62,21 +68,64 @@ class ComidaController
     {
         if (empty($id)) {
             return json([
-                "status" => "error",
-                "error" => "El 'id' es requerido"
+                "state" => "error",
+                "type" => "validation",
+                "list" => ["El 'id' es requerido"]
             ]);
         }
         if (empty(ComidaRepository::Find($id))) {
             return json([
-                "status" => "error",
-                "errorType" => "internal error",
-                "errorDescription" => "no se encontro el recurso para eliminarlo"
+                "state" => "error",
+                "type" => "internal error",
+                "list" => ["no se encontro el recurso para eliminarlo"]
             ], 404);
         }
         ComidaRepository::Delete($id);
         return json([
-            "status" => "ok",
-            "descripcion" => "eliminado correctamente",
+            "state" => "ok",
+            "mensage" => "eliminado correctamente",
         ]);
+    }
+
+
+    private function validateComida($comida)
+    {
+        $errorList = [];
+
+        if (!empty($comida->nombre)) {
+            if (!is_string($comida->nombre)) {
+                array_push($errorList, "el valor nombre es invalido");
+            }
+            $length = strlen($comida->nombre);
+
+            if (!($length > 0 && 20 > $length)) {
+                array_push($errorList, "la longitud del valor nombre no se encuentra dentro de los parametros esperados");
+            }
+        }
+
+        if (!empty($comida->precio)) {
+            if (!is_int($comida->precio)) {
+                array_push($errorList, "el valor precio es invalido");
+            }
+        }
+
+        if (!empty($comida->descripcion)) {
+            if (!is_string($comida->descripcion)) {
+                array_push($errorList, "el valor descripcion es invalio");
+            }
+            if (!($length > 0 && 100 > $length)) {
+                array_push($errorList, "la longitud del valor nombre no se encuentra dentro de los parametros esperados");
+            }
+        }
+
+        if (!empty($errorList)) {
+            return [
+                "state" => "error",
+                "type" => "error of type",
+                "list" => $errorList
+            ];
+        } else {
+            return null;
+        }
     }
 }

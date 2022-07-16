@@ -5,19 +5,26 @@
 create database restaurant;
 
 create table Comidas (
-id int,
+id serial primary key,
 nombre varchar(20),
 precio decimal,
 descripcion text
 );
 
-INSERT INTO Comidas VALUES(1,'sopa',10,'comida ...');
-INSERT INTO Comidas VALUES(2,'pizza',15,'comida ...');
-INSERT INTO Comidas VALUES(3,'pollo',15,'comida ...');
-INSERT INTO Comidas VALUES(4,'majadito',15,'comida ...');
-INSERT INTO Comidas VALUES(5,'pescado',15,'comida ...');
-INSERT INTO Comidas VALUES(6,'milanesa',15,'comida ...');
-INSERT INTO Comidas VALUES(7,'bife',15,'comida ...');
+INSERT INTO Comidas (nombre,precio,descripcion) 
+VALUES('sopa',10,'comida ...');
+INSERT INTO Comidas (nombre,precio,descripcion)
+VALUES('pizza',15,'comida ...');
+INSERT INTO Comidas (nombre,precio,descripcion)
+VALUES('pollo',15,'comida ...');
+INSERT INTO Comidas (nombre,precio,descripcion)
+VALUES('majadito',15,'comida ...');
+INSERT INTO Comidas (nombre,precio,descripcion)
+VALUES('pescado',15,'comida ...');
+INSERT INTO Comidas (nombre,precio,descripcion)
+VALUES('milanesa',15,'comida ...');
+INSERT INTO Comidas (nombre,precio,descripcion)
+VALUES('bife',15,'comida ...');
 
 select * from Comidas;
 

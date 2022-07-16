@@ -46,8 +46,9 @@ class ComidaRepository
     public static function Save($comida)
     {
         $conection = ConectionPDO::CreateConection();
-        $statement = $conection->prepare("insert into comidas values(?,?,?,?)");
-        $statement->execute([$comida->id, $comida->nombre, $comida->precio, $comida->descripcion]);
+        $statement = $conection->prepare("insert into comidas (nombre,precio,descripcion) values(?,?,?)");
+        $statement->execute([$comida->nombre, $comida->precio, $comida->descripcion]);
+        return $conection->lastInsertId();
     }
 
     public static function Update($comida)
